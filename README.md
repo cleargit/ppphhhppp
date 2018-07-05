@@ -1,7 +1,7 @@
 # ppphhhppp
-#### 数据库配置在 \application\database.php 改
+#### 数据库配置在 \application\database.php 
 ------------------------------------------
-##把网站根目录设置 \public 
+## 把网站根目录设置 \public 
 ------------------------------------------
-####访问地址
-localhsot/index/**
+#### 访问地址为
+##### localhsot/index/**
