@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>register</title>
+    {include file="common/meta" /}
+</head>
+<body  >
+<script>
+    layui.use('form', function(){
+        var form = layui.form,
+            $=layui.jquery;
+        //监听提交
+        form.on('submit(register)', function(data){
+            loading = layer.load(2, {
+                shade: [0.2,'#000'] //0.2透明度的白色背景
+            });
+            // var url;
+            // url="./register.php";
+
+            // if (param.password1!=null){
+            //   url="/user/add.do";
+            // }
+            var param=data.field;
+            $.post('register',param,function (data) {
+
+                if (data.code==1)
+                {
+                    layer.close(loading);
+                    layer.msg(data.msg, {icon: 1, time: 1500}, function(){
+                    });
+                }else {
+                    layer.close(loading);
+                    layer.msg(data.msg, {icon: 2, anim: 6, time: 1000});
+                    var timestamp = new Date().getTime();
+                    $(".img").attr('src','../getGifCode.do?'+timestamp);
+                }
+            });
+            return false;
+        });
+        $('#img').click(function () {
+            var img=$(".img");
+            var timestamp = new Date().getTime();
+            img.attr('src','../getGifCode.do?'+timestamp);
+        })
+        $("a").mouseover(function () {
+            $(this).css("border-bottom-color","#1AA094");
+        })
+        $("a").mouseout(function () {
+            $(this).css("border-bottom-color","#fff");
+        })
+
+    });
+    function select(id) {
+        var $=layui.jquery;
+        $(".layui-form").css("display","none")
+        $("#"+id).css("display","block")
+    }
+</script>
+<div class="video_mask"></div>
+<div class="register shadow">
+    <div class="box-top">
+        <a href="login.html">登陆</a>
+        <a >注册</a>
+    </div>
+    <div class="" >
+        <!--<div class="box-top">-->
+            <!--<a href="javascript:select('common')">普通注册</a>-->
+            <!--<a  href="javascript:select('mail')">邮箱注册</a>-->
+        <!--</div>-->
+        <form class="layui-form" id="common">
+            <div class="layui-form-item" >
+                <input class="layui-input" name="username" placeholder="用户名" lay-verify="required" type="text" autocomplete="off" value="">
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" name="name" placeholder="昵称" lay-verify="required" type="text" autocomplete="off" value="">
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password" autocomplete="off" value="">
+            </div>
+            <div class="layui-form-item form_code">
+                <input class="layui-input" name="vicode" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
+                <div class="code"><img src="./captcha" alt="captcha" /></div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-submit="" lay-filter="register">注册</button>
+            </div>
+        </form>
+        <!--<form class="layui-form " style="display: none" id="mail">-->
+            <!--<div class="layui-form-item" >-->
+                <!--<input class="layui-input" name="username" placeholder="邮箱" lay-verify="required" type="text" autocomplete="off" value="">-->
+            <!--</div>-->
+            <!--<div class="layui-form-item">-->
+                <!--<input class="layui-input" name="name" placeholder="昵称" lay-verify="required" type="text" autocomplete="off" value="">-->
+            <!--</div>-->
+            <!--<div class="layui-form-item">-->
+                <!--<input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password" autocomplete="off" value="">-->
+            <!--</div>-->
+            <!--<div class="layui-form-item">-->
+                <!--<input class="layui-input" name="password1" placeholder="确定密码" lay-verify="required" type="password" autocomplete="off" value="">-->
+            <!--</div>-->
+            <!--<div class="layui-form-item form_code">-->
+                <!--<input class="layui-input" name="vcode" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">-->
+                <!--<div class="code"><img  class="img" src="../getGifCode.do" alt="验证码"></div>-->
+            <!--</div>-->
+            <!--<div class="layui-form-item">-->
+                <!--<button class="layui-btn" lay-submit="" lay-filter="register">注册</button>-->
+            <!--</div>-->
+        <!--</form>-->
+
+    </div>
+
+</div>
+
+</body>
+
+
+</html>
