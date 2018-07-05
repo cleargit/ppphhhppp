@@ -1,4 +1,4 @@
-# ppphhhppp
+# 部署
 #### 数据库配置在 \application\database.php 
 ------------------------------------------
 ## 把网站根目录设置 \public 
