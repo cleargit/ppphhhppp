@@ -203,7 +203,7 @@ WHERE
     public function editGoodsForCart(){
         $accessToken=parent::getAccountId()['0']['id'];
         $editParam=$this->request->post('editParam');
-        Db::table('cart')->where("account_id",$accessToken)->where('id',$editParam['id'])->exp('goodsCode',$editParam['goodsCode'])->exp('produceNum',$editParam['specificationsId'])->exp('number',$editParam['specificationsId']);
+        Db::table('cart')->where("account_id",$accessToken)->where('id',$editParam['id'])->exp('goodsCode',$editParam['goodsCode'])->exp('produceNum',$editParam['specificationsId'])->exp('specifications',$editParam['specificationsId']);
         return ResultVo::success("成功");
     }
     public function getMyShare(){
@@ -471,7 +471,7 @@ WHERE
         return ResultVo::success( parent::find('ssg_start_page'));
     }
     public function getProvinceList(){
-        returnResultVo::success( parent::find('ssg_province'));
+        return ResultVo::success( parent::find('ssg_province'));
     }
     public function getCityList(){
         return ResultVo::success(parent::find('ssg_city',$this->request->post('pCode')));

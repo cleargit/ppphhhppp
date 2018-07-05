@@ -20,4 +20,5 @@
 //
 //];
 use think\Route;
-Route::bind('\app\index\controller\Index','class');
+//Route::bind('\app\index\controller\Index','class');
+Route::bind('index');
