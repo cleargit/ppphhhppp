@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Multiple ComboTree - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<h2>Multiple ComboTree</h2>
+	<p>Click the right arrow button to show the tree panel and select multiple nodes.</p>
+	<div style="margin:20px 0">
+		<span>Cascade Check: </span>
+		<input type="checkbox" checked onclick="$('#cc').combotree({cascadeCheck:$(this).is(':checked')})">
+	</div>
+	<div class="easyui-panel" style="width:100%;max-width:400px;padding:30px 60px;">
+		<div style="margin-bottom:20px">
+			<input id="cc" class="easyui-combotree" data-options="url:'tree_data1.json',method:'get',editable:false,lines:true,multiple:true,onlyLeafCheck:false, required:true," style="width:100%">
+		</div>
+		<button onclick="submit()" >say</button>
+	</div>
+
+</body>
+<script>
+	function submit(kk){
+	    alert($('#cc').val());
+        var textTemp=$('#cc').combotree('getText');
+        console.log(textTemp);
+
+	    clearInterval(kk)
+	}
+    $(function(){
+        function submit(kk){
+            // alert($('#cc').val());
+            // var textTemp=$('#cc').combotree('getText');
+            // console.log(textTemp);
+
+            clearInterval(kk)
+            // handlerValue()
+        }
+        $("#cc").combotree({ //
+
+            // cascadeCheck:false, //禁止联动选择
+            onCheck:function(node, checked){
+                // var tree = $('#cc').combotree('tree');
+                // var root = tree.tree('getRoot');
+                // console.log(root);
+                if (node.id<0){
+      				handler(node);
+				}else if (node.id==0) {
+                    handler(node)
+                    // var tree = $('#cc').combotree('tree');
+                    // var parent = tree.tree('getParent', node.target);
+                    // var childList = $(tree).tree('getChildren',parent.target);
+
+                    // var childList=node.children;
+                    // var i=0;
+                    // handler(node);
+                    // console.log(childList.length)
+                    // var kk=setInterval(function () {
+                    //     console.log(i)
+						// // handler(childList[i])
+						// i++;
+						// if (i==childList.length){
+						//     setTimeout(function () {
+                    //             submit(kk);
+                    //
+                    //         },1)
+                    //
+						// }
+                    // },100)
+
+				}else {
+                    children(node,this)
+				}
+        },
+
+    });
+        function kk(node) {
+            var childList=node.children;
+            var i=0;
+            var kk=setInterval(function () {
+                handler(childList[i])
+                if (childList[i].children.length>0){
+                    kk(childList[i]);
+                }
+                i++;
+                if (i==childList.length){
+
+                    setTimeout(function () {
+                        submit(kk);
+
+                    },1)
+                }
+            },100)
+        }
+        function handler(node) {
+            console.log(node);
+            if (node.children!=null&&node.children.length>0){
+                var children=node.children;
+                for (var i=0;i<children.length;i++){
+                    if (children[i].id<0){
+                        handler(children[i]);
+					}
+				}
+			}
+                var textTemp=$('#cc').combotree('getText');
+				var text=textTemp.replace(node.text+','+'');
+				var valueTemp=$('#cc').combotree('getValues');
+                var arr=textTemp.split(',');
+                for (var i=0;i<arr.length;i++){
+                    if (node.text==arr[i]){
+                        arr[i]='';
+                    }
+                }
+                // node.checked=false;
+                // node._checked=false;
+                node.checkState="unchecked";
+                // var result=arr.filter(s=>$.trim(s).length>0)
+                // var text=result.join(',');
+            	$('#cc').combotree('setText',text);
+            	handlerValue();
+                // setTimeout(function () {
+                //     $('#cc').combotree('setText',text)
+                //     handlerValue();
+                // },1)
+
+        }
+
+        function children(node,tree) {
+            var tree = $('#cc').combotree('tree');
+            var parent = tree.tree('getParent', node.target);
+            var childList = $(tree).tree('getChildren',parent.target);
+            if (childList.length==0){
+                return
+			}
+            var flag=1;
+            for (var i=0;i<childList.length;i++){
+                if ('unchecked'==childList[i].checkState){
+                    flag=0;
+                    break;
+                }
+            }
+            if (flag){
+                handler(parent);
+            }
+            var textTemp=$('#cc').combotree('getText');
+            var arr=textTemp.split(',');
+            var result=arr.filter(s=>$.trim(s).length>0)
+            var text=result.join(',');
+            setTimeout(function () {
+                $('#cc').combotree('setText',text)
+                // handlerValue();
+            },1)
+        }
+        function handlerValue() {
+            var valueTemp=$('#cc').combotree('getValues');
+            console.log(valueTemp);
+            for (var i=0;i<valueTemp.length;i++){
+                if (valueTemp[i]<=0){
+                    valueTemp[i]='';
+                }
+            }
+            var result=valueTemp.filter(s=>$.trim(s).length>0)
+
+            setTimeout(function () {
+                $('#cc').combotree('setValues',result)
+            },10)
+            console.log(result);
+        }
+    });
+</script>
+</html>
